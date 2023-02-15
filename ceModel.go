@@ -17,8 +17,8 @@ func ceModelCall() {
 	for x := 0; x < windowSize.X; x++ {
 		for y := 0; y < windowSize.Y; y++ {
 			// prevColor := getColCoords(x, y, prevIM)
-			pixel := NewPixel(x, y, nullCol)
-
+			pixel := getPixel(x, y)
+			
 			// check whether to render slime
 			makeSlime := false
 			for _, joint := range ce.joints {
@@ -28,10 +28,7 @@ func ceModelCall() {
 					chanceSlime := rand.Float32()
 					if distance < chanceSlime {
 						makeSlime = true
-					} else {
-						makeSlime = false
 					}
-					break
 				}
 			}
 

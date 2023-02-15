@@ -9,10 +9,11 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-// func getColCoords(x, y int, m [][][]uint8) (col *Color) {
-// 	col = NewColor(m[0][x][y], m[1][x][y], m[2][x][y])
-// 	return
-// }
+func getPixel(x, y int) (pix *Pixel) {
+	col := NewColor(imgMatrix[0][x][y], imgMatrix[1][x][y], imgMatrix[2][x][y])
+	pix = NewPixel(x, y, col)
+	return
+}
 
 // func getIMCol(pix *Pixel) *Color {
 // 	return getIMColCoords(pix.pos.X, pix.pos.Y)
