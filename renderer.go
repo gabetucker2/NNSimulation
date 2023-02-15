@@ -32,11 +32,12 @@ func initWindow() () {
 	return
 }
 
-func renderWindow() {
+func run() {
 
 	// update window to image
 	img := image.NewRGBA(image.Rect(0, 0, W, H))
 
+	// do until escape is pressed
 	for {
 
 		// Update the image
@@ -60,13 +61,4 @@ func renderWindow() {
 
 	}
 
-}
-
-func main() {
-	///////////////////////////////////////
-	// call our functions
-	initParams()
-	initWindow()
-	pixelgl.Run(renderWindow)
-	///////////////////////////////////////
 }
