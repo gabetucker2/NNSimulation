@@ -4,9 +4,13 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-func main() {
+func run() {
 	// call our functions
 	initParams()
 	initWindow()
+	renderWindow()
+}
+
+func main() {
 	pixelgl.Run(run)
 }

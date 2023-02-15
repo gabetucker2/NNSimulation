@@ -32,13 +32,19 @@ func initWindow() () {
 	return
 }
 
-func run() {
+func keyPresses() {
+	if window.JustPressed(pixelgl.KeyEnter) {
+		runModel()
+	}
+}
+
+func renderWindow() {
 
 	// update window to image
 	img := image.NewRGBA(image.Rect(0, 0, W, H))
 
 	// do until escape is pressed
-	for {
+	for !window.Closed() {
 
 		// Update the image
 		setImageToimgMatrix(img, imgMatrix)
@@ -51,10 +57,8 @@ func run() {
 		sprite.Draw(window, pixel.IM.Moved(window.Bounds().Center()))
 		window.Update()
 
-		// close the window if escape is pressed
-		if window.JustPressed(pixelgl.KeyEscape) {
-			break
-		}
+		// Go through rest button press checks
+		keyPresses()
 
 		// Wait
 		time.Sleep(time.Duration(time.Duration(1/fps).Seconds()))
