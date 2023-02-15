@@ -9,6 +9,10 @@ var imgMatrix [][]uint8
 var fps int
 var window *pixelgl.Window
 
+type CElegans struct {
+	
+}
+
 func initParams() {
 
 	///////////////////////////////////////
