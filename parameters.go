@@ -8,7 +8,9 @@ var windowSize *Vector2
 var imgMatrix [][][]uint8
 var fps int
 var window *pixelgl.Window
-var emptyCol, slimeCol *Color
+var nullCol, emptyCol, slimeCol *Color
+var ce *CaenorhabditisElegans
+var modelCall, modelUpdateLeft, modelUpdateRight, modelUpdateUp, modelUpdateDown func()
 
 func initParams() {
 
@@ -22,11 +24,27 @@ func initParams() {
 	fps = 60
 
 	// set our colors
-	emptyCol = NewColor(255, 255, 255)
-	slimeCol = NewColor(0, 200, 200)
+	emptyCol = NewColor(230, 211, 181)
+	slimeCol = NewColor(168, 123, 50)
+
+	// create ce
+	ce = NewCE([]*Joint {
+		NewJoint(100, 100, 50, true, []int {1}),  // 0
+		NewJoint(150, 120, 20, false, []int {0}), // 1
+	})
+
+	// define which model we would like to run
+	modelCall = ceModelCall
+	modelUpdateLeft = ceModelUpdateLeft
+	modelUpdateRight = ceModelUpdateRight
+	modelUpdateUp = ceModelUpdateUp
+	modelUpdateDown = ceModelUpdateDown
 
 	///////////////////////////////////////
 	// DON'T CHANGE THESE
+
+	// set nullCol to some arbitrary color
+	nullCol = NewColor(0, 0, 0)
 
 	// set up imgMatrix
 	imgMatrix = make([][][]uint8, 3)
@@ -36,6 +54,8 @@ func initParams() {
 			imgMatrix[i][x] = make([]uint8, windowSize.Y)
 		}
 	}
+	// initialize model
+	modelCall()
 
 	///////////////////////////////////////
 

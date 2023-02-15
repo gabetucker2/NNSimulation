@@ -9,27 +9,39 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-func getIMColCoords(x, y int) (col *Color) {
-	col = NewColor(imgMatrix[0][x][y], imgMatrix[1][x][y], imgMatrix[2][x][y])
-	return
-}
+// func getColCoords(x, y int, m [][][]uint8) (col *Color) {
+// 	col = NewColor(m[0][x][y], m[1][x][y], m[2][x][y])
+// 	return
+// }
 
 // func getIMCol(pix *Pixel) *Color {
 // 	return getIMColCoords(pix.pos.X, pix.pos.Y)
 // }
 
+func setIMColCoords(x, y int, col *Color) {
+	imgMatrix[0][x][y] = col.R
+	imgMatrix[1][x][y] = col.G
+	imgMatrix[2][x][y] = col.B
+}
+
 func setIMCol(pix *Pixel) {
-	imgMatrix[0][pix.pos.X][pix.pos.Y] = pix.col.R
-	imgMatrix[1][pix.pos.X][pix.pos.Y] = pix.col.G
-	imgMatrix[2][pix.pos.X][pix.pos.Y] = pix.col.B
+	setIMColCoords(pix.pos.X, pix.pos.Y, pix.col)
+}
+
+func fillIM(col *Color) {
+	for x := 0; x < windowSize.X; x++ {
+		for y := 0; y < windowSize.Y; y++ {
+			setIMColCoords(x, y, col)
+		}
+	}
 }
 
 func updatePixelCol(pix *Pixel, col *Color, updateIM ...any) {
-
+	
 	pix.col.R = col.R
 	pix.col.G = col.G
 	pix.col.B = col.B
-
+	
 	if len(updateIM) == 0 || updateIM[0] == true {
 		setIMCol(pix)
 	}
@@ -60,8 +72,17 @@ func initWindow() () {
 }
 
 func keyPresses() {
-	if window.JustPressed(pixelgl.KeyEnter) {
-		runCEModel()
+	if window.JustPressed(pixelgl.KeyRight) {
+		modelUpdateRight()
+	}
+	if window.JustPressed(pixelgl.KeyLeft) {
+		modelUpdateLeft()
+	}
+	if window.JustPressed(pixelgl.KeyUp) {
+		modelUpdateUp()
+	}
+	if window.JustPressed(pixelgl.KeyDown) {
+		modelUpdateDown()
 	}
 }
 

@@ -1,48 +1,72 @@
 package main
 
-// create Caenorhabditis Elegans
-func runCEModel() {
+import (
+	"math/rand"
+)
 
-	// create ce struct
-	ce := new(CaenorhabditisElegans)
-	ce.joints = []*Joint {
-		NewJoint(100, 100, 50, true, []int {1}), // 0
-		NewJoint(150, 120, 20, false, []int {0}), // 1
-	}
+// create Caenorhabditis Elegans
+func ceModelCall() {
+
+	// get previous IM save before refresh
+	// prevIM := imgMatrix
+
+	// fill to empty
+	fillIM(emptyCol)
 
 	// update ce's physical representation
 	for x := 0; x < windowSize.X; x++ {
 		for y := 0; y < windowSize.Y; y++ {
-			pixel := NewPixel(x, y, getIMColCoords(x, y))
+			// prevColor := getColCoords(x, y, prevIM)
+			pixel := NewPixel(x, y, nullCol)
 
 			// check whether to render slime
-			inRangeOfJoint := false
+			makeSlime := false
 			for _, joint := range ce.joints {
-				if SqrDistance(pixel.pos, joint.pos) < joint.size {
-					inRangeOfJoint = true
+				if SqrDistance(pixel.pos, joint.pos) - joint.sqrSize <= 0 {
+					// distance to center of joint, from 0, inner-most, to 1, outer-most (non-linear)
+					distance := SqrDistance(pixel.pos, joint.pos) / joint.sqrSize
+					chanceSlime := rand.Float32()
+					if distance < chanceSlime {
+						makeSlime = true
+					} else {
+						makeSlime = false
+					}
 					break
 				}
 			}
 
 			// set color
-			var newCol *Color
-			if inRangeOfJoint {
+			newCol := nullCol
+			if makeSlime {
 				newCol = slimeCol
-			} else {
-				newCol = emptyCol
 			}
 
 			// update the image
-			updatePixelCol(pixel, newCol)
+			if newCol != nullCol {
+				updatePixelCol(pixel, newCol)
+			}
 			
 		}
 	}
 
-	// set ce's anchor to its anchor joint
-	for _, j := range ce.joints {
-		if j.anchor {
-			ce.anchor = j
-		}
-	}
+}
 
+func ceModelUpdateLeft() {
+	ce.joints[0].pos.X -= 10
+	ceModelCall()
+}
+
+func ceModelUpdateRight() {
+	ce.joints[0].pos.X += 10
+	ceModelCall()
+}
+
+func ceModelUpdateUp() {
+	ce.joints[0].pos.Y -= 10
+	ceModelCall()
+}
+
+func ceModelUpdateDown() {
+	ce.joints[0].pos.Y += 10
+	ceModelCall()
 }
