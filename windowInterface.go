@@ -52,7 +52,7 @@ func updatePixelCol(pix *Pixel, col *Color, updateIM ...any) {
 func setImageToImgMatrix(img *image.RGBA, imgMatrix [][][]uint8) {
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-  			img.Set(x, y, color.RGBA {
+			img.Set(x, y, color.RGBA {
 				R: uint8(imgMatrix[0][x][y]),
 				G: uint8(imgMatrix[1][x][y]),
 				B: uint8(imgMatrix[2][x][y]),

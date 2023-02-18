@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/faiface/pixel/pixelgl"
 )
 
@@ -11,6 +13,7 @@ var window *pixelgl.Window
 var nullCol, emptyCol, slimeCol *Color
 var ce *CaenorhabditisElegans
 var modelCall, modelUpdateLeft, modelUpdateRight, modelUpdateUp, modelUpdateDown func()
+var inf float64
 
 func initParams() {
 
@@ -24,13 +27,13 @@ func initParams() {
 	fps = 60
 
 	// set our colors
-	emptyCol = NewColor(230, 211, 181)
-	slimeCol = NewColor(168, 123, 50)
+	emptyCol = NewColor(116, 116, 116)
+	slimeCol = NewColor(59, 59, 59)
 
 	// create ce
 	ce = NewCE([]*Joint {
-		NewJoint(100, 100, 50, true, []int {1}),  // 0
-		NewJoint(150, 120, 20, false, []int {0}), // 1
+		// NewJoint(100, 100, 50, true, []int {1}),  // 0
+		// NewJoint(150, 120, 20, false, []int {0}), // 1
 	})
 
 	// define which model we would like to run
@@ -45,6 +48,9 @@ func initParams() {
 
 	// set nullCol to some arbitrary color
 	nullCol = NewColor(0, 0, 0)
+
+	// set quasi-infinity constant
+	inf = math.MaxFloat64
 
 	// set up imgMatrix
 	imgMatrix = make([][][]uint8, 3)

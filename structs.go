@@ -54,17 +54,17 @@ func NewPixel(x, y int, col *Color) (p *Pixel) {
 
 type Joint struct {
 	pos            *Vector2
-	size           float32
-	sqrSize        float32
+	radius         float64
+	sqrSize        float64
 	anchor         bool
 	connectionIdxs []int
 }
 
-func NewJoint(x, y int, size float32, anchor bool, connectionIdxs []int) (j *Joint) {
+func NewJoint(x, y int, radius float64, anchor bool, connectionIdxs []int) (j *Joint) {
 	j = new(Joint)
 	j.pos = NewVector2(x, y)
-	j.size = size
-	j.sqrSize = size * size
+	j.radius = radius
+	j.sqrSize = radius * radius
 	j.anchor = anchor
 	j.connectionIdxs = connectionIdxs
 	return
