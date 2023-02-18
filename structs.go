@@ -52,7 +52,7 @@ func NewPixel(x, y int, col *Color) (p *Pixel) {
 	return
 }
 
-type Joint struct {
+type Effector struct {
 	pos            *Vector2
 	radius         float64
 	sqrSize        float64
@@ -60,8 +60,8 @@ type Joint struct {
 	connectionIdxs []int
 }
 
-func NewJoint(x, y int, radius float64, anchor bool, connectionIdxs []int) (j *Joint) {
-	j = new(Joint)
+func NewEffector(x, y int, radius float64, anchor bool, connectionIdxs []int) (j *Effector) {
+	j = new(Effector)
 	j.pos = NewVector2(x, y)
 	j.radius = radius
 	j.sqrSize = radius * radius
@@ -71,15 +71,15 @@ func NewJoint(x, y int, radius float64, anchor bool, connectionIdxs []int) (j *J
 }
 
 type CaenorhabditisElegans struct {
-	anchor *Joint
-	joints []*Joint
+	anchor    *Effector
+	effectors []*Effector
 }
 
-func NewCE(joints []*Joint) (ce *CaenorhabditisElegans) {
+func NewCE(effectors []*Effector) (ce *CaenorhabditisElegans) {
 	ce = new(CaenorhabditisElegans)
-	ce.joints = joints
-	// set ce's anchor to its anchor joint
-	for _, j := range ce.joints {
+	ce.effectors = effectors
+	// set ce's anchor to its anchor effector
+	for _, j := range ce.effectors {
 		if j.anchor {
 			ce.anchor = j
 		}

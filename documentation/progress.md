@@ -8,10 +8,14 @@
 
  ![Image](../images/CreateEffectors.png)
 
- <h2>Combine effectors</h2>
+ <h2>Mathematically model effector connection</h2>
+
+ ![Image](../images/CircleConnection.png)
+
+ Our [effector connection model](https://www.desmos.com/calculator/0kshfzuegl).
+
+ <h2>Implement effector connection</h2>
 
  ![Image](../images/CreateEffectors.png)
-
- Our [joint connection algorithm](https://www.desmos.com/calculator/0kshfzuegl).
 
  [< return](../README.md)

@@ -1,17 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"math"
+	"time"
 )
 
 // render slime pixel if meets conditions
-func intraJointSlime(joint *Joint, pixel *Pixel) {
+func intraEffectorSlime(effector *Effector, pixel *Pixel) {
 
 	// initialize test case
 	makeSlime := true
 
 	// is it outside the circle
-	if SqrDistance(pixel.pos, joint.pos) > math.Pow(joint.radius, 2) {
+	if SqrDistance(pixel.pos, effector.pos) > math.Pow(effector.radius, 2) {
 		makeSlime = false
 	}
 
@@ -23,19 +25,19 @@ func intraJointSlime(joint *Joint, pixel *Pixel) {
 }
 
 // render slime pixel if meets conditions
-func interJointSlime(jointA, jointB *Joint, pixel *Pixel) {
+func interEffectorSlime(effectorA, effectorB *Effector, pixel *Pixel) {
 
 	// initialize test case
 	makeSlime := true
 
 	// according with: https://www.desmos.com/calculator/cy12nq52sx
 	// define our circle properties
-	A := jointA.pos
-	B := jointB.pos
+	A := effectorA.pos
+	B := effectorB.pos
 	x := float64(pixel.pos.X)
 	y := float64(pixel.pos.Y)
-	r_A := jointA.radius
-	r_B := jointB.radius
+	r_A := effectorA.radius
+	r_B := effectorB.radius
 
 	// define the slope of our intersect function f(x) between the circle centers
 	m_f := m(A, B)
@@ -46,16 +48,16 @@ func interJointSlime(jointA, jointB *Joint, pixel *Pixel) {
 	F_Bx := F_Nx(x, M, B)
 
 	// define the intersects between our inverse functions and their corresponding circles
-	A_tx := N_n(A, r_A, M, true)
-	B_tx := N_n(B, r_B, M, true)
-	A_bx := N_n(A, r_A, M, false)
-	B_bx := N_n(B, r_B, M, false)
+	A_t := N_n(A, r_A, M, true)
+	B_t := N_n(B, r_B, M, true)
+	A_b := N_n(A, r_A, M, false)
+	B_b := N_n(B, r_B, M, false)
 
 	// define the functions connecting the intersect points
-	m_t := m(A_tx, B_tx)
-	m_b := m(A_bx, B_bx)
-	b_t := b(A_tx, B_tx, m_t)
-	b_b := b(A_bx, B_bx, m_b)
+	m_t := m(A_t, B_t)
+	m_b := m(A_b, B_b)
+	b_t := b(A_t, B_t, m_t)
+	b_b := b(A_b, B_b, m_b)
 	f_tx := fx(x, m_t, b_t)
 	f_bx := fx(x, m_b, b_b)
 
@@ -67,6 +69,8 @@ func interJointSlime(jointA, jointB *Joint, pixel *Pixel) {
 	if !(belowUpper && aboveLower && rightOfLeft && leftOfRight) {
 		makeSlime = false
 	}
+
+	fmt.Printf("A.Y: %d\nA.Y: %d\nB.X: %d\nB.Y: %d\nx: %g\ny: %g\nr_A: %g\nr_B: %g\nm_f: %g\nM: %g\nF_Ax: %g\nF_Bx: %g\nA_t.X: %d\nB_t.X: %d\nA_b.X: %d\nB_b.X: %d\nA_t.Y: %d\nB_t.Y: %d\nA_b.Y: %d\nB_b.Y: %d\nm_t: %g\nm_b: %g\nb_t: %g\nb_b: %g\nf_tx: %g\nf_bx: %g\n", A.Y, A.Y, B.X, B.Y, x, y, r_A, r_B, m_f, M, F_Ax, F_Bx, A_t.X, B_t.X, A_b.X, B_b.X, A_t.Y, B_t.Y, A_b.Y, B_b.Y, m_t, m_b, b_t, b_b, f_tx, f_bx)
 
 	// render pixel if passed
 	if makeSlime {
@@ -91,12 +95,13 @@ func ceModelCall() {
 			// prevColor := getColCoords(x, y, prevIM)
 			pixel := getPixel(x, y)
 			
-			// check whether to render slime between joints
-			for _, jointA := range ce.joints {
-				intraJointSlime(jointA, pixel)
-				for _, idx := range jointA.connectionIdxs {
-					jointB := ce.joints[idx]
-					interJointSlime(jointA, jointB, pixel)
+			// check whether to render slime between effectors
+			for _, effectorA := range ce.effectors {
+				intraEffectorSlime(effectorA, pixel)
+				for _, idx := range effectorA.connectionIdxs {
+					effectorB := ce.effectors[idx]
+					interEffectorSlime(effectorA, effectorB, pixel)
+					time.Sleep(time.Duration(time.Second * 10000))
 				}
 			}
 			
@@ -106,21 +111,21 @@ func ceModelCall() {
 }
 
 func ceModelUpdateLeft() {
-	ce.joints[0].pos.X -= 10
+	ce.effectors[0].pos.X -= 10
 	ceModelCall()
 }
 
 func ceModelUpdateRight() {
-	ce.joints[0].pos.X += 10
+	ce.effectors[0].pos.X += 10
 	ceModelCall()
 }
 
 func ceModelUpdateUp() {
-	ce.joints[0].pos.Y -= 10
+	ce.effectors[0].pos.Y -= 10
 	ceModelCall()
 }
 
 func ceModelUpdateDown() {
-	ce.joints[0].pos.Y += 10
+	ce.effectors[0].pos.Y += 10
 	ceModelCall()
 }
