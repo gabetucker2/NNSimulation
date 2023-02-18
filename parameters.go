@@ -32,8 +32,8 @@ func initParams() {
 
 	// create ce
 	ce = NewCE([]*Joint {
-		// NewJoint(100, 100, 50, true, []int {1}),  // 0
-		// NewJoint(150, 120, 20, false, []int {0}), // 1
+		NewJoint(100, 100, 50, true, []int {1}),  // 0
+		NewJoint(150, 120, 20, false, []int {0}), // 1
 	})
 
 	// define which model we would like to run
