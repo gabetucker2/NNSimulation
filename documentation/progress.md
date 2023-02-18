@@ -12,10 +12,14 @@
 
  ![Image](../images/ModelConnect.png)
 
- Our [effector connection model](https://www.desmos.com/calculator/jmdrqlviki).
+ Our [effector connection model](https://www.desmos.com/calculator/eihh0v5kvx).
 
  <h2>Implement effector connection</h2>
 
  ![Image](../images/ImplementConnect.png)
+
+ <h2>Implement tension equations</h2>
+
+ Our [tension model](https://www.desmos.com/calculator/dkrkf4jgrr).
 
  [< return](../README.md)

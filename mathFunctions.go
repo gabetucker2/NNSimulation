@@ -29,6 +29,30 @@ func SqrMagnitude(v1, v2 any) float64 {
 	return xSqrDist + ySqrDist
 }
 
+// func lerpVector2(A, B *Vector2, i float64) (O *Vector2) {
+// 	O = NewVector2(0, 0)
+// 	O.x = m
+// }
+
+// func Tx(x, T, s float64) float64 {
+// 	return -(1/(x-T))*s
+// }
+
+// func ApplyTension(vsub, vdom *Vector2, T, s, l, dx float64) {
+// 	d := math.Sqrt(SqrMagnitude(vsub, vdom))
+// 	dPrime := d
+// 	currentT := Tx(d, T, s)
+// 	if d >= T {
+// 		dPrime = T - dx
+// 	} else if currentT > l {
+// 		dPrime -= currentT - Tx(d - dx, T, s)
+// 	}
+// 	lerp(dPrime/d)
+// 	theta
+// 	dx := math.Sin(theta) * dPrime
+// 	dy := math.Cos(theta) * dPrime
+// }
+
 func m(A, B *Vector2) float64 {
 	xDist := B.x - A.x
 	yDist := B.y - A.y
@@ -39,6 +63,10 @@ func m(A, B *Vector2) float64 {
 	} else {
 		return yDist / xDist
 	}
+}
+
+func b(V *Vector2, m float64) float64 {
+	return V.y - m*V.x
 }
 
 func M(m float64) float64 {
