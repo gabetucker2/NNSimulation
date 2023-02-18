@@ -10,12 +10,12 @@
 
  <h2>Mathematically model effector connection</h2>
 
- ![Image](../images/CircleConnection.png)
+ ![Image](../images/ModelConnect.png)
 
  Our [effector connection model](https://www.desmos.com/calculator/jmdrqlviki).
 
  <h2>Implement effector connection</h2>
 
- ![Image](../images/ImplementConnection.png)
+ ![Image](../images/ImplementConnect.png)
 
  [< return](../README.md)
