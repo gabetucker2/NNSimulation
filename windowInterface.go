@@ -3,7 +3,6 @@ package main
 import (
 	"image"
 	"image/color"
-	"time"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -15,23 +14,19 @@ func getPixel(x, y int) (pix *Pixel) {
 	return
 }
 
-// func getIMCol(pix *Pixel) *Color {
-// 	return getIMColCoords(pix.pos.X, pix.pos.Y)
-// }
-
 func setIMColCoords(x, y int, col *Color) {
-	imgMatrix[0][x][y] = col.R
-	imgMatrix[1][x][y] = col.G
-	imgMatrix[2][x][y] = col.B
+	imgMatrix[0][x][y] = col.r
+	imgMatrix[1][x][y] = col.g
+	imgMatrix[2][x][y] = col.b
 }
 
 func setIMCol(pix *Pixel) {
-	setIMColCoords(pix.pos.X, pix.pos.Y, pix.col)
+	setIMColCoords(pix.pos.x, pix.pos.y, pix.col)
 }
 
 func fillIM(col *Color) {
-	for x := 0; x < windowSize.X; x++ {
-		for y := 0; y < windowSize.Y; y++ {
+	for x := 0; x < windowSize.x; x++ {
+		for y := 0; y < windowSize.y; y++ {
 			setIMColCoords(x, y, col)
 		}
 	}
@@ -39,9 +34,9 @@ func fillIM(col *Color) {
 
 func updatePixelCol(pix *Pixel, col *Color, updateIM ...any) {
 	
-	pix.col.R = col.R
-	pix.col.G = col.G
-	pix.col.B = col.B
+	pix.col.r = col.r
+	pix.col.g = col.g
+	pix.col.b = col.b
 	
 	if len(updateIM) == 0 || updateIM[0] == true {
 		setIMCol(pix)
@@ -65,7 +60,7 @@ func setImageToImgMatrix(img *image.RGBA, imgMatrix [][][]uint8) {
 func initWindow() () {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Window Renderer",
-		Bounds: pixel.R(0, 0, float64(windowSize.X), float64(windowSize.Y)),
+		Bounds: pixel.R(0, 0, float64(windowSize.x), float64(windowSize.y)),
 		VSync:  true,
 	}
 	window, _ = pixelgl.NewWindow(cfg)
@@ -90,9 +85,9 @@ func keyPresses() {
 func renderWindow() {
 
 	// update window to image
-	img := image.NewRGBA(image.Rect(0, 0, windowSize.X, windowSize.Y))
+	img := image.NewRGBA(image.Rect(0, 0, windowSize.x, windowSize.y))
 
-	// do until escape is pressed
+	// do until X is pressed
 	for !window.Closed() {
 
 		// Update the image
@@ -108,9 +103,6 @@ func renderWindow() {
 
 		// Go through rest button press checks
 		keyPresses()
-
-		// Wait
-		time.Sleep(time.Duration(time.Duration(1/fps).Seconds()))
 
 	}
 

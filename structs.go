@@ -1,53 +1,68 @@
 package main
 
+import (
+	"fmt"
+	"math"
+)
+
 type Vector2 struct {
-	X int
-	Y int
+	x float64
+	y float64
 }
 
-func NewVector2(x, y int) (v2 *Vector2) {
+// x and y can be floats or ints
+func NewVector2(x, y any) (v2 *Vector2) {
 	v2 = new(Vector2)
-	v2.X = x
-	v2.Y = y
+	if fmt.Sprintf("%T", x) == "float64" {
+		v2.x = x.(float64)
+		v2.y = y.(float64)
+	} else {
+		v2.x = float64(x.(int))
+		v2.y = float64(y.(int))
+	}
 	return
 }
 
-type Vector3 struct {
-	X int
-	Y int
-	Z int
+type Vector2Int struct {
+	x int
+	y int
 }
 
-func NewVector3(x, y, z int) (v3 *Vector3) {
-	v3 = new(Vector3)
-	v3.X = x
-	v3.Y = y
-	v3.Z = z
+// x and y can be floats or ints
+func NewVector2Int(x, y any) (v2 *Vector2Int) {
+	v2 = new(Vector2Int)
+	if fmt.Sprintf("%T", x) == "int" {
+		v2.x = x.(int)
+		v2.y = y.(int)
+	} else {
+		v2.x = int(math.Round(x.(float64)))
+		v2.y = int(math.Round(y.(float64)))
+	}
 	return
 }
 
 type Color struct {
-	R uint8
-	G uint8
-	B uint8
+	r uint8
+	g uint8
+	b uint8
 }
 
 func NewColor(r, g, b uint8) (c *Color) {
 	c = new(Color)
-	c.R = r
-	c.G = g
-	c.B = b
+	c.r = r
+	c.g = g
+	c.b = b
 	return
 }
 
 type Pixel struct {
-	pos *Vector2
+	pos *Vector2Int
 	col *Color
 }
 
 func NewPixel(x, y int, col *Color) (p *Pixel) {
 	p = new(Pixel)
-	p.pos = NewVector2(x, y)
+	p.pos = NewVector2Int(x, y)
 	p.col = col
 	return
 }
@@ -60,7 +75,7 @@ type Effector struct {
 	connectionIdxs []int
 }
 
-func NewEffector(x, y int, radius float64, anchor bool, connectionIdxs []int) (e *Effector) {
+func NewEffector(x, y, radius float64, anchor bool, connectionIdxs []int) (e *Effector) {
 	e = new(Effector)
 	e.pos = NewVector2(x, y)
 	e.radius = radius
@@ -71,12 +86,12 @@ func NewEffector(x, y int, radius float64, anchor bool, connectionIdxs []int) (e
 }
 
 type Polygon struct {
-	points []*Vector2
+	vertices []*Vector2
 }
 
-func MakePolygon(points []*Vector2) (p *Polygon) {
+func MakePolygon(vertices []*Vector2) (p *Polygon) {
 	p = new(Polygon)
-	p.points = points
+	p.vertices = vertices
 	return
 }
 

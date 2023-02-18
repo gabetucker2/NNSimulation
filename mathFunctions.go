@@ -1,37 +1,44 @@
 package main
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
-func yMathToYWindow(y float64) float64 {
-	return float64(windowSize.Y) - y
-}
-
-func SqrMagnitude(v1, v2 *Vector2) float64 {
-	xDiff := v2.X - v1.X
-	yDiff := v2.Y - v1.Y
+// vectors can be *Vector2 or *Vector2Int
+func SqrMagnitude(v1, v2 any) float64 {
+	var x1, y1, x2, y2 float64
+	if fmt.Sprintf("%T", v1) == "*main.Vector2" {
+		x1 = v1.(*Vector2).x
+		y1 = v1.(*Vector2).y
+	} else {
+		x1 = float64(v1.(*Vector2Int).x)
+		y1 = float64(v1.(*Vector2Int).y)
+	}
+	if fmt.Sprintf("%T", v2) == "*main.Vector2" {
+		x2 = v2.(*Vector2).x
+		y2 = v2.(*Vector2).y
+	} else {
+		x2 = float64(v2.(*Vector2Int).x)
+		y2 = float64(v2.(*Vector2Int).y)
+	}
+	xDiff := x2 - x1
+	yDiff := y1 - y2
 	xSqrDist := xDiff * xDiff
 	ySqrDist := yDiff * yDiff
-	return float64(xSqrDist) + float64(ySqrDist)
+	return xSqrDist + ySqrDist
 }
 
 func m(A, B *Vector2) float64 {
-	xDist := B.X - A.X
-	yDist := B.Y - A.Y
+	xDist := B.x - A.x
+	yDist := B.y - A.y
 	if xDist == 0 {
 		return inf
 	} else if yDist == 0 {
 		return 0
 	} else {
-		return float64(yDist) / float64(xDist)
+		return yDist / xDist
 	}
-}
-
-func b(A, B *Vector2, m float64) float64 {
-	return float64(A.Y) - m*float64(A.X)
-}
-
-func fx(x, m, b float64) float64 {
-	return m*x + b
 }
 
 func M(m float64) float64 {
@@ -42,41 +49,68 @@ func M(m float64) float64 {
 	}
 }
 
-// calculates the inverse function of fx for a circle
-func F_Nx(x, M float64, N *Vector2) float64 {
-	return M*(x-float64(N.X)) + float64(N.Y)
+// calculates the inverse function of fx at x for a circle
+func F_Nx(x, M, r_N float64, N *Vector2) float64 {
+	if M == inf {
+		return N.y + r_N
+	} else {
+		return M*(x-N.x) + N.y
+	}
 }
 
-// calculates the top point
+// calculates vertex
 func N_n(N, A, B *Vector2, r_N, M float64, bNotT bool) (V *Vector2) {
 	mult := 0.0
 	if bNotT {
-		if A.Y < B.Y {
+		if A.y < B.y {
 			mult = 1
 		} else {
 			mult = -1
 		}
 	} else {
-		if A.Y < B.Y {
+		if A.y < B.y {
 			mult = -1
 		} else {
 			mult = 1
 		}
 	}
-	V_x := 0
+	V_x := 0.0
 	if 1+math.Pow(M,2) == 0 {
-		V_x = int(inf)
+		V_x = inf
 	} else {
-		V_x = int(math.Round(float64(N.X) + mult*r_N*math.Sqrt(1/(1+math.Pow(M,2)))))
+		V_x = N.x + mult*r_N*math.Sqrt(1/(1+math.Pow(M,2)))
 	}
 	V = NewVector2(
 		V_x,
-		int(math.Round(F_Nx(float64(V_x), M, N))),
+		F_Nx(V_x, M, r_N*mult, N),
 	)
 	return
 }
 
-func InPolygon(polygon *Polygon, x, y float64) (in bool) {
-	in = true
+func inPolygon(polygon *Polygon, vector *Vector2) (in bool) {
+
+	// initialize condition
+	in = false
+
+	// initialize variables
+    numVertices := len(polygon.vertices)
+	x := vector.x
+	y := vector.y
+
+	// iterate over pairs of adjacent vertices of the polygon (ray casting algorithm)
+    j := numVertices - 1
+    for i := 0; i < numVertices; i++ {
+        xi := polygon.vertices[i].x
+        yi := polygon.vertices[i].y
+        xj := polygon.vertices[j].x
+        yj := polygon.vertices[j].y
+        if ((yi > y) != (yj > y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi) {
+            in = !in
+        }
+        j = i
+    }
+
+	// return condition
 	return
+
 }

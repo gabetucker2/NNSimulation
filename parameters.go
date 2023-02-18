@@ -6,9 +6,8 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-var windowSize *Vector2
+var windowSize *Vector2Int
 var imgMatrix [][][]uint8
-var fps int
 var window *pixelgl.Window
 var nullCol, emptyCol, slimeCol *Color
 var ce *CaenorhabditisElegans
@@ -21,10 +20,7 @@ func initParams() {
 	// CHANGE THESE
 
 	// set up window width/height
-	windowSize = NewVector2(500, 500)
-
-	// set the fps
-	fps = 60
+	windowSize = NewVector2Int(500, 300)
 
 	// set our colors
 	emptyCol = NewColor(116, 116, 116)
@@ -32,8 +28,9 @@ func initParams() {
 
 	// create ce
 	ce = NewCE([]*Effector {
-		NewEffector(50, 120, 50, true, []int {1}),  // 0
-		NewEffector(100, 200, 20, false, []int {0}), // 1
+		NewEffector(100, 150, 20, false, []int {1}), // 0
+		NewEffector(200, 170, 30, false, []int {2}), // 1
+		NewEffector(250, 155, 25, true , []int { }), // 2
 	})
 
 	// define which model we would like to run
@@ -55,9 +52,9 @@ func initParams() {
 	// set up imgMatrix
 	imgMatrix = make([][][]uint8, 3)
 	for i := 0; i < 3; i++ {
-		imgMatrix[i] = make([][]uint8, windowSize.Y)
-		for x := 0; x < windowSize.X; x++ {
-			imgMatrix[i][x] = make([]uint8, windowSize.Y)
+		imgMatrix[i] = make([][]uint8, windowSize.x)
+		for x := 0; x < windowSize.x; x++ {
+			imgMatrix[i][x] = make([]uint8, windowSize.y)
 		}
 	}
 	// initialize model

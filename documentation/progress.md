@@ -16,6 +16,6 @@
 
  <h2>Implement effector connection</h2>
 
- ![Image](../images/CreateEffectors.png)
+ ![Image](../images/ImplementConnection.png)
 
  [< return](../README.md)
