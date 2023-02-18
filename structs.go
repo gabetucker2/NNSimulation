@@ -55,18 +55,28 @@ func NewPixel(x, y int, col *Color) (p *Pixel) {
 type Effector struct {
 	pos            *Vector2
 	radius         float64
-	sqrSize        float64
+	sqrRadius      float64
 	anchor         bool
 	connectionIdxs []int
 }
 
-func NewEffector(x, y int, radius float64, anchor bool, connectionIdxs []int) (j *Effector) {
-	j = new(Effector)
-	j.pos = NewVector2(x, y)
-	j.radius = radius
-	j.sqrSize = radius * radius
-	j.anchor = anchor
-	j.connectionIdxs = connectionIdxs
+func NewEffector(x, y int, radius float64, anchor bool, connectionIdxs []int) (e *Effector) {
+	e = new(Effector)
+	e.pos = NewVector2(x, y)
+	e.radius = radius
+	e.sqrRadius = radius * radius
+	e.anchor = anchor
+	e.connectionIdxs = connectionIdxs
+	return
+}
+
+type Polygon struct {
+	points []*Vector2
+}
+
+func MakePolygon(points []*Vector2) (p *Polygon) {
+	p = new(Polygon)
+	p.points = points
 	return
 }
 

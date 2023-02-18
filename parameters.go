@@ -32,8 +32,8 @@ func initParams() {
 
 	// create ce
 	ce = NewCE([]*Effector {
-		NewEffector(100, 100, 50, true, []int {1}),  // 0
-		NewEffector(150, 120, 20, false, []int {0}), // 1
+		NewEffector(50, 120, 50, true, []int {1}),  // 0
+		NewEffector(100, 200, 20, false, []int {0}), // 1
 	})
 
 	// define which model we would like to run

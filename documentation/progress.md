@@ -12,7 +12,7 @@
 
  ![Image](../images/CircleConnection.png)
 
- Our [effector connection model](https://www.desmos.com/calculator/0kshfzuegl).
+ Our [effector connection model](https://www.desmos.com/calculator/jmdrqlviki).
 
  <h2>Implement effector connection</h2>
 
