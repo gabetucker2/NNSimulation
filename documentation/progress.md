@@ -20,6 +20,8 @@
 
  <h2>Implement tension equations</h2>
 
+ ![Image](../images/Tension.png)
+
  Our [tension model](https://www.desmos.com/calculator/dkrkf4jgrr).
 
  [< return](../README.md)
