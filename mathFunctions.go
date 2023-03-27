@@ -149,6 +149,6 @@ func inPolygon(polygon *Polygon, vector *Vector2) (in bool) {
 
 }
 
-func tensionTransform(posA, posB Vector2) (newPosB Vector2) {
-	// fx := -(1/(x - tensThreshold))*tensSmoothness
-}
+// func tensionTransform(posA, posB Vector2) (newPosB Vector2) {
+// 	// fx := -(1/(x - tensThreshold))*tensSmoothness
+// }
