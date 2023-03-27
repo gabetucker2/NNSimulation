@@ -18,10 +18,12 @@
 
  ![Image](../images/ImplementConnect.png)
 
- <h2>Implement tension equations</h2>
+ <h2>Mathematically model tension equation</h2>
 
  ![Image](../images/Tension.png)
 
  Our [tension model](https://www.desmos.com/calculator/dkrkf4jgrr).
+
+ <h2>Implement tension equation</h2>
 
  [< return](../README.md)

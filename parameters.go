@@ -13,6 +13,7 @@ var nullCol, emptyCol, slimeCol *Color
 var ce *CaenorhabditisElegans
 var modelCall, modelUpdateLeft, modelUpdateRight, modelUpdateUp, modelUpdateDown func()
 var inf float64
+var tensThreshold, tensVertAsymptote, tensVertAsymptoteOffset, tensSmoothness, tensTransFactor, tensD float64
 
 func initParams() {
 
@@ -39,6 +40,14 @@ func initParams() {
 	modelUpdateRight = ceModelUpdateRight
 	modelUpdateUp = ceModelUpdateUp
 	modelUpdateDown = ceModelUpdateDown
+
+	// initialize tension equation parameters
+	tensThreshold = 9.2
+	tensVertAsymptote = 39.3
+	tensVertAsymptoteOffset = 1.1
+	tensSmoothness = 57.5
+	tensTransFactor = 120
+	tensD = 0.000001
 
 	///////////////////////////////////////
 	// DON'T CHANGE THESE

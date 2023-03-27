@@ -6,7 +6,7 @@ import (
 )
 
 // vectors can be *Vector2 or *Vector2Int
-func SqrMagnitude(v1, v2 any) float64 {
+func sqrMagnitude(v1, v2 any) float64 {
 	var x1, y1, x2, y2 float64
 	if fmt.Sprintf("%T", v1) == "*main.Vector2" {
 		x1 = v1.(*Vector2).x
@@ -29,17 +29,23 @@ func SqrMagnitude(v1, v2 any) float64 {
 	return xSqrDist + ySqrDist
 }
 
-// func lerpVector2(A, B *Vector2, i float64) (O *Vector2) {
-// 	O = NewVector2(0, 0)
-// 	O.x = m
-// }
+func lerp(a, b, i float64) (o float64) {
+	return a + (b - a)*i
+}
+
+func lerpVector2(A, B *Vector2, i float64) (O *Vector2) {
+	O = NewVector2(0, 0)
+	O.x = lerp(A.x, B.x, i)
+	O.y = lerp(A.y, B.y, i)
+	return O
+}
 
 // func Tx(x, T, s float64) float64 {
 // 	return -(1/(x-T))*s
 // }
 
 // func ApplyTension(vsub, vdom *Vector2, T, s, l, dx float64) {
-// 	d := math.Sqrt(SqrMagnitude(vsub, vdom))
+// 	d := math.Sqrt(sqrMagnitude(vsub, vdom))
 // 	dPrime := d
 // 	currentT := Tx(d, T, s)
 // 	if d >= T {
@@ -141,4 +147,8 @@ func inPolygon(polygon *Polygon, vector *Vector2) (in bool) {
 	// return condition
 	return
 
+}
+
+func tensionTransform(posA, posB Vector2) (newPosB Vector2) {
+	// fx := -(1/(x - tensThreshold))*tensSmoothness
 }

@@ -21,7 +21,7 @@ func intraEffectorSlime(circle *Effector, pixel *Pixel) {
 	makeSlime := true
 
 	// is it outside the circle
-	if SqrMagnitude(pixel.pos, circle.pos) > circle.sqrRadius {
+	if sqrMagnitude(pixel.pos, circle.pos) > circle.sqrRadius {
 		makeSlime = false
 	}
 
