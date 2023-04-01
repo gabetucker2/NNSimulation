@@ -40,25 +40,6 @@ func lerpVector2(A, B *Vector2, i float64) (O *Vector2) {
 	return O
 }
 
-// func Tx(x, T, s float64) float64 {
-// 	return -(1/(x-T))*s
-// }
-
-// func ApplyTension(vsub, vdom *Vector2, T, s, l, dx float64) {
-// 	d := math.Sqrt(sqrMagnitude(vsub, vdom))
-// 	dPrime := d
-// 	currentT := Tx(d, T, s)
-// 	if d >= T {
-// 		dPrime = T - dx
-// 	} else if currentT > l {
-// 		dPrime -= currentT - Tx(d - dx, T, s)
-// 	}
-// 	lerp(dPrime/d)
-// 	theta
-// 	dx := math.Sin(theta) * dPrime
-// 	dy := math.Cos(theta) * dPrime
-// }
-
 func m(A, B *Vector2) float64 {
 	xDist := B.x - A.x
 	yDist := B.y - A.y
@@ -149,6 +130,37 @@ func inPolygon(polygon *Polygon, vector *Vector2) (in bool) {
 
 }
 
-// func tensionTransform(posA, posB Vector2) (newPosB Vector2) {
-// 	// fx := -(1/(x - tensThreshold))*tensSmoothness
-// }
+func tensionTransform(posA, posB *Vector2) (newPosA Vector2) {
+
+	tensUpperThreshold := tensVertAsymptote - tensUpperThresholdOffset
+
+	// unadjusted tension function
+	var f = func(x float64) float64 {
+		return -(1/(x - tensLowerThreshold)) * tensSmoothness
+	}
+
+	// slope cutoff for f, so f' does not exceed the output's value
+	var g = func(x float64) float64 {
+		return ((f(tensUpperThreshold) - f(tensUpperThreshold - delta)) / delta) * x
+	}
+
+	// adjusted tension function
+	var h = func(x float64) float64 {
+		if x > tensUpperThreshold { // upper bound
+			return g(x) - math.Abs(g(tensUpperThreshold) - f(tensUpperThreshold))
+		} else if x <= tensLowerThreshold { // lower bound
+			return f(tensLowerThreshold)
+		} else { // f
+			return f(x)
+		}
+	}
+
+	d := math.Sqrt(sqrMagnitude(posA, posB)) // distance between points
+	posC := *NewVector2(d, h(d))
+	posD := *NewVector2(d - delta, h(d - delta))
+	m := (posD.y - posC.y) / (posD.x - posC.x)
+	newPosA = *lerpVector2(posA, posB, (d / tensTransFactor) * m)
+
+	return
+
+}
