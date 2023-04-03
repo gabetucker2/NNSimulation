@@ -52,10 +52,6 @@ func m(A, B *Vector2) float64 {
 	}
 }
 
-func b(V *Vector2, m float64) float64 {
-	return V.y - m*V.x
-}
-
 func M(m float64) float64 {
 	if m == 0 {
 		return inf

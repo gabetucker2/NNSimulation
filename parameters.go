@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/gabetucker2/gogenerics"
 )
 
 var windowSize *Vector2Int
@@ -64,6 +65,7 @@ func initParams() {
 
 	// set nullCol to some arbitrary color
 	nullCol = NewColor(0, 0, 0)
+	gogenerics.RemoveUnusedError(nullCol)
 
 	// set quasi-infinity constant
 	inf = math.MaxFloat64

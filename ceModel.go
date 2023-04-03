@@ -136,7 +136,3 @@ func ceModelUpdateDown() {
 	ce.getAnchorEffector().pos.y += 10
 	ceModelCall()
 }
-
-func ceTimestep() {
-	// tensionTransform()
-}
