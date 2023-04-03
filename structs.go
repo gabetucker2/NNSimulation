@@ -97,6 +97,7 @@ func MakePolygon(vertices []*Vector2) (p *Polygon) {
 
 type CaenorhabditisElegans struct {
 	anchor    *Effector
+	anchorIdx int
 	effectors []*Effector
 }
 
@@ -104,9 +105,10 @@ func NewCE(effectors []*Effector) (ce *CaenorhabditisElegans) {
 	ce = new(CaenorhabditisElegans)
 	ce.effectors = effectors
 	// set ce's anchor to its anchor effector
-	for _, j := range ce.effectors {
-		if j.anchor {
-			ce.anchor = j
+	for i, e := range ce.effectors {
+		if e.anchor {
+			ce.anchor = e
+			ce.anchorIdx = i
 		}
 	}
 	return

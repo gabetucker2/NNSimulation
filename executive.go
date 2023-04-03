@@ -8,7 +8,7 @@ func run() {
 	// call our functions
 	initParams()
 	initWindow()
-	renderWindow()
+	renderRoutine()
 }
 
 func main() {

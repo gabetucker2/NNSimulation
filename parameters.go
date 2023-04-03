@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"time"
 
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -15,6 +16,8 @@ var modelCall, modelUpdateLeft, modelUpdateRight, modelUpdateUp, modelUpdateDown
 var inf float64
 var tensLowerThreshold, tensVertAsymptote, tensUpperThresholdOffset, tensSmoothness, tensTransFactor float64
 var delta float64
+var fps int;
+var deltaT float64;
 
 func initParams() {
 
@@ -52,6 +55,10 @@ func initParams() {
 	// initialize delta value
 	delta = 0.000001
 
+	// initialize time settings
+	fps = 60
+	deltaT = 0.01; // 10ms between each physics update
+
 	///////////////////////////////////////
 	// DON'T CHANGE THESE
 
@@ -69,8 +76,28 @@ func initParams() {
 			imgMatrix[i][x] = make([]uint8, windowSize.y)
 		}
 	}
+
 	// initialize model
 	modelCall()
+
+	// initialize routines
+	renderTicker := time.NewTicker(time.Duration(1/float64(fps)) * time.Second)
+	physicsTicker := time.NewTicker(time.Duration(deltaT) * time.Second)
+	quit := make(chan struct{})
+	go func() {
+		for {
+		select {
+			case <- renderTicker.C:
+				renderRoutine()
+			case <- physicsTicker.C:
+				physicsRoutine()
+			case <- quit:
+				renderTicker.Stop()
+				physicsTicker.Stop()
+				return
+			}
+		}
+	}()
 
 	///////////////////////////////////////
 
