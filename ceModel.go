@@ -26,14 +26,14 @@ func intraEffectorSlime(circle *Effector, pixel *Pixel) {
 	}
 
 	// random chance not to render
-	// chanceNotRender := 0.0
-	// if rand.Float64() < chanceNotRender {
-	// 	makeSlime = false
-	// }
+	chanceNotRender := 1 - cytoDensity
+	if rand.Float64() < chanceNotRender {
+		makeSlime = false
+	}
 
 	// render pixel if passed
 	if makeSlime {
-		updatePixelCol(pixel, slimeCol)
+		updatePixelCol(pixel, cytoCol)
 	}
 
 }
@@ -44,20 +44,20 @@ func interEffectorSlime(connection *Polygon, pixel *Pixel) {
 	// initialize test condition
 	makeSlime := true
 
- 	// is it inside the connection polygon
+	// is it inside the connection polygon
 	if !inPolygon(connection, NewVector2(pixel.pos.x, pixel.pos.y)) {
 		makeSlime = false
 	}
 
 	// random chance not to render
-	chanceNotRender := 0.1
+	chanceNotRender := 1 - connectionDensity
 	if rand.Float64() < chanceNotRender {
 		makeSlime = false
 	}
 
 	// render pixel if passed
 	if makeSlime {
-		updatePixelCol(pixel, slimeCol)
+		updatePixelCol(pixel, connectionCol)
 	}
 
 }
@@ -66,11 +66,11 @@ func interEffectorSlime(connection *Polygon, pixel *Pixel) {
 func ceModelCall() {
 
 	// get previous IM save before refresh
-	// prevIM := imgMatrix
+	// prevIM := pixelMatrix
 
 	// fill to empty
 	fillIM(emptyCol)
-			
+
 	// check whether to render slime between effectors
 	for _, effectorA := range ce.effectors {
 		for _, idx := range effectorA.connectionIdxs {
@@ -94,9 +94,8 @@ func ceModelCall() {
 			A_2 := N_n(A, A, B, r_A, M, true)
 			B_2 := N_n(B, A, B, r_B, M, true)
 
-
 			// define the connection zone as a polygon
-			connection := MakePolygon([]*Vector2 {A_1, B_1, B_2, A_2})
+			connection := MakePolygon([]*Vector2{A_1, B_1, B_2, A_2})
 
 			// update ce's circle connection physical representations
 			for x := 0; x < windowSize.x; x++ {
@@ -104,7 +103,7 @@ func ceModelCall() {
 					interEffectorSlime(connection, getPixel(x, y))
 				}
 			}
-			
+
 		}
 
 		// update ce's circle physical representations

@@ -26,4 +26,11 @@
 
  <h2>Implement tension equation</h2>
 
+ ![Image](../images/TensionImp.gif)
+
+ <h2>Improve visuals</h2>
+
+ ![Image](../images/Visuals.gif)
+
  [< return](../README.md)
+ 

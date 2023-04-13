@@ -23,14 +23,14 @@ func sqrMagnitude(v1, v2 any) float64 {
 		y2 = float64(v2.(*Vector2Int).y)
 	}
 	xDiff := x2 - x1
-	yDiff := y1 - y2
+	yDiff := y2 - y1
 	xSqrDist := xDiff * xDiff
 	ySqrDist := yDiff * yDiff
 	return xSqrDist + ySqrDist
 }
 
 func lerp(a, b, i float64) (o float64) {
-	return a + (b - a)*i
+	return a + (b-a)*i
 }
 
 func lerpVector2(A, B *Vector2, i float64) (O *Vector2) {
@@ -86,10 +86,10 @@ func N_n(N, A, B *Vector2, r_N, M float64, bNotT bool) (V *Vector2) {
 		}
 	}
 	V_x := 0.0
-	if 1+math.Pow(M,2) == 0 {
+	if 1+math.Pow(M, 2) == 0 {
 		V_x = inf
 	} else {
-		V_x = N.x + mult*r_N*math.Sqrt(1/(1+math.Pow(M,2)))
+		V_x = N.x + mult*r_N*math.Sqrt(1/(1+math.Pow(M, 2)))
 	}
 	V = NewVector2(
 		V_x,
@@ -104,22 +104,22 @@ func inPolygon(polygon *Polygon, vector *Vector2) (in bool) {
 	in = false
 
 	// initialize variables
-    numVertices := len(polygon.vertices)
+	numVertices := len(polygon.vertices)
 	x := vector.x
 	y := vector.y
 
 	// iterate over pairs of adjacent vertices of the polygon (ray casting algorithm)
-    j := numVertices - 1
-    for i := 0; i < numVertices; i++ {
-        xi := polygon.vertices[i].x
-        yi := polygon.vertices[i].y
-        xj := polygon.vertices[j].x
-        yj := polygon.vertices[j].y
-        if ((yi > y) != (yj > y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi) {
-            in = !in
-        }
-        j = i
-    }
+	j := numVertices - 1
+	for i := 0; i < numVertices; i++ {
+		xi := polygon.vertices[i].x
+		yi := polygon.vertices[i].y
+		xj := polygon.vertices[j].x
+		yj := polygon.vertices[j].y
+		if ((yi > y) != (yj > y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi) {
+			in = !in
+		}
+		j = i
+	}
 
 	// return condition
 	return
@@ -132,18 +132,18 @@ func tensionTransform(posA, posB *Vector2) (newPosA Vector2) {
 
 	// unadjusted tension function
 	var f = func(x float64) float64 {
-		return -(1/(x - tensLowerThreshold)) * tensSmoothness
+		return -(1 / (x - tensVertAsymptote)) * tensSmoothness
 	}
 
 	// slope cutoff for f, so f' does not exceed the output's value
 	var g = func(x float64) float64 {
-		return ((f(tensUpperThreshold) - f(tensUpperThreshold - delta)) / delta) * x
+		return ((f(tensUpperThreshold) - f(tensUpperThreshold-delta)) / delta) * x
 	}
 
 	// adjusted tension function
 	var h = func(x float64) float64 {
-		if x > tensUpperThreshold { // upper bound
-			return g(x) - math.Abs(g(tensUpperThreshold) - f(tensUpperThreshold))
+		if x >= tensUpperThreshold { // upper bound
+			return g(x) - math.Abs(g(tensUpperThreshold)-f(tensUpperThreshold))
 		} else if x <= tensLowerThreshold { // lower bound
 			return f(tensLowerThreshold)
 		} else { // f
@@ -153,9 +153,13 @@ func tensionTransform(posA, posB *Vector2) (newPosA Vector2) {
 
 	d := math.Sqrt(sqrMagnitude(posA, posB)) // distance between points
 	posC := *NewVector2(d, h(d))
-	posD := *NewVector2(d - delta, h(d - delta))
-	m := (posD.y - posC.y) / (posD.x - posC.x)
-	newPosA = *lerpVector2(posA, posB, (d / tensTransFactor) * m)
+	posD := *NewVector2(d-delta, h(d-delta))
+	slope := (posD.y - posC.y) / (posD.x - posC.x)
+	if posD.x-posC.x == 0 { // prevent turning into infinity edge case, arbitrary slope
+		slope = 0.001
+	}
+	alpha := tensTransFactor * d * slope
+	newPosA = *lerpVector2(posA, posB, alpha)
 
 	return
 
