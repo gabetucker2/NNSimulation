@@ -9,15 +9,15 @@ import (
 )
 
 func getPixel(x, y int) (pix *Pixel) {
-	col := NewColor(imgMatrix[0][x][y], imgMatrix[1][x][y], imgMatrix[2][x][y])
+	col := NewColor(pixelMatrix[0][x][y], pixelMatrix[1][x][y], pixelMatrix[2][x][y])
 	pix = NewPixel(x, y, col)
 	return
 }
 
 func setIMColCoords(x, y int, col *Color) {
-	imgMatrix[0][x][y] = col.r
-	imgMatrix[1][x][y] = col.g
-	imgMatrix[2][x][y] = col.b
+	pixelMatrix[0][x][y] = col.r
+	pixelMatrix[1][x][y] = col.g
+	pixelMatrix[2][x][y] = col.b
 }
 
 func setIMCol(pix *Pixel) {
@@ -33,37 +33,36 @@ func fillIM(col *Color) {
 }
 
 func updatePixelCol(pix *Pixel, col *Color, updateIM ...any) {
-	
+
 	pix.col.r = col.r
 	pix.col.g = col.g
 	pix.col.b = col.b
-	
+
 	if len(updateIM) == 0 || updateIM[0] == true {
 		setIMCol(pix)
 	}
 
 }
 
-func setImageToImgMatrix(img *image.RGBA, imgMatrix [][][]uint8) {
+func setImageToPixelMatrix(img *image.RGBA, pixelMatrix [][][]uint8) {
 	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
 		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			img.Set(x, y, color.RGBA {
-				R: uint8(imgMatrix[0][x][y]),
-				G: uint8(imgMatrix[1][x][y]),
-				B: uint8(imgMatrix[2][x][y]),
+			img.Set(x, y, color.RGBA{
+				R: uint8(pixelMatrix[0][x][y]),
+				G: uint8(pixelMatrix[1][x][y]),
+				B: uint8(pixelMatrix[2][x][y]),
 				A: 255,
 			})
 		}
 	}
 }
 
-func initWindow() () {
-	cfg := pixelgl.WindowConfig{
+func initWindow() {
+	window, _ = pixelgl.NewWindow(pixelgl.WindowConfig{
 		Title:  "Window Renderer",
 		Bounds: pixel.R(0, 0, float64(windowSize.x), float64(windowSize.y)),
 		VSync:  true,
-	}
-	window, _ = pixelgl.NewWindow(cfg)
+	})
 	return
 }
 

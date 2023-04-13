@@ -5,10 +5,12 @@ import (
 )
 
 func run() {
+
 	// call our functions
 	initParams()
 	initWindow()
-	renderRoutine()
+	initRoutines()
+
 }
 
 func main() {
