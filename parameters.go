@@ -33,7 +33,7 @@ func initParams() {
 	windowSize = NewVector2Int(500, 300)
 
 	// set our colors
-	emptyCol = NewColor(246, 240, 213)
+	emptyCol = NewColor(169,164,126)
 	cytoCol = NewColor(132, 115, 34)
 	connectionCol = NewColor(120, 105, 30)
 
